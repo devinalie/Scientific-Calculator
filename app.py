@@ -1,150 +1,37 @@
 import streamlit as st
 import math
 
-st.set_page_config(page_title="Kalkulator Scientific", page_icon="🔬", layout="centered")
+st.set_page_config(page_title="Kalkulator Scientific", page_icon="🔬")
+st.title("🔬 Kalkulator Scientific")
 
-st.title("🔬 Kalkulator Scientific Python")
-st.caption("Mendukung operasi dasar, trigonometri, logaritma, akar, dan faktorial.")
-st.divider()
+mode = st.radio("Mode:", ["2 Angka", "1 Angka (Scientific)"], horizontal=True)
 
-mode = st.radio(
-    "Pilih Mode Kalkulator:",
-    ["Operasi 2 Angka (Dasar & Pangkat)", "Fungsi Scientific (1 Angka)"],
-    horizontal=True
-)
-
-st.divider()
-
-if mode == "Operasi 2 Angka (Dasar & Pangkat)":
-    col1, col2 = st.columns(2)
-    with col1:
-        a = st.number_input("Angka Pertama (x):", value=0.0, format="%g")
-    with col2:
-        b = st.number_input("Angka Kedua (y):", value=0.0, format="%g")
-
-    operasi = st.selectbox(
-        "Pilih Operasi:",
-        [
-            "Tambah (x + y)",
-            "Kurang (x - y)",
-            "Kali (x × y)",
-            "Bagi (x ÷ y)",
-            "Pangkat (x ^ y)",
-            "Modulus / Sisa Bagi (x % y)"
-        ]
-    )
-
-    if st.button("Hitung Hasil", type="primary", use_container_width=True):
-        hasil = None
-        error = None
-
-        if operasi == "Tambah (x + y)":
-            hasil = a + b
-        elif operasi == "Kurang (x - y)":
-            hasil = a - b
-        elif operasi == "Kali (x × y)":
-            hasil = a * b
-        elif operasi == "Bagi (x ÷ y)":
-            error = "Error: Tidak bisa membagi dengan nol!" if b == 0 else a / b
-        elif operasi == "Pangkat (x ^ y)":
-            hasil = math.pow(a, b)
-        elif operasi == "Modulus / Sisa Bagi (x % y)":
-            error = "Error: Tidak bisa modulus dengan nol!" if b == 0 else a % b
-
-        if error:
-            st.error(error)
-        else:
-            if isinstance(hasil, float) and hasil.is_integer():
-                hasil = int(hasil)
-            st.success(f"### Hasil: {hasil}")
-
-else:
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        x = st.number_input("Masukkan Nilai (x):", value=0.0, format="%g")
-    with col2:
-        satuan_sudut = st.selectbox("Satuan Sudut (Trigonometri):", ["Derajat (°)", "Radian"])
-    fungsi = st.selectbox(
-        "Pilih Fungsi Scientific:",
-        [
-            "Sinus — sin(x)",
-            "Cosinus — cos(x)",
-            "Tangen — tan(x)",
-            "Akar Kuadrat — √x",
-            "Logaritma Basis 10 — log10(x)",
-            "Logaritma Natural — ln(x)",
-            "Eksponensial — e^x",
-            "Faktorial — x!",
-            "Nilai Mutlak — |x|"
-        ]
-    )
-
-    if st.button("Hitung Fungsi", type="primary", use_container_width=True):
-        hasil = None
-        error = None
-
-        sudut = math.radians(x) if satuan_sudut == "Derajat (°)" else x
-
-        try:
-            if fungsi == "Sinus — sin(x)":
-                hasil = round(math.sin(sudut), 10)
-            elif fungsi == "Cosinus — cos(x)":
-                hasil = round(math.cos(sudut), 10)
-            elif fungsi == "Tangen — tan(x)":
-                if abs(math.cos(sudut)) < 1e-12:
-                    error = "Error: Nilai tan tidak terdefinisi pada sudut 90° / 270°!"
-                else:
-                    hasil = round(math.tan(sudut), 10)
-            elif fungsi == "Akar Kuadrat — √x":
-                if x < 0:
-                    error = "Error: Akar kuadrat tidak menerima bilangan negatif!"
-                else:
-                    hasil = math.sqrt(x)
-            elif fungsi == "Logaritma Basis 10 — log10(x)":
-                if x <= 0:
-                    error = "Error: Logaritma hanya untuk angka lebih dari 0!"
-                else:
-                    hasil = math.log10(x)
-            elif fungsi == "Logaritma Natural — ln(x)":
-                if x <= 0:
-                    error = "Error: Logaritma natural hanya untuk angka lebih dari 0!"
-                else:
-                    hasil = math.log(x)
-            elif fungsi == "Eksponensial — e^x":
-                hasil = math.exp(x)
-            elif fungsi == "Faktorial — x!":
-                if x < 0 or not float(x).is_integer():
-                    error = "Error: Faktorial hanya berlaku untuk bilangan bulat positif (0, 1, 2, ...)!"
-                else:
-                    hasil = math.factorial(int(x))
-            elif fungsi == "Nilai Mutlak — |x|":
-                hasil = abs(x)
-        except OverflowError:
-            error = "Error: Angka hasil perhitungan terlalu besar!"
-
-        if error:
-            st.error(error)
-        else:
-            if isinstance(hasil, float) and hasil.is_integer():
-                hasil = int(hasil)
-            st.success(f"### Hasil: {hasil}")
-
-with st.expander("📌 Konstanta Matematika Referensi"):
+if mode == "2 Angka":
     c1, c2 = st.columns(2)
-    c1.write(f"**Pi (π):** `{math.pi}`")
-    c2.write(f"**Euler (e):** `{math.e}`")
-    satuan_sudut = st.selectbox("Satuan Sudut (Trigonometri):", ["Derajat (°)", "Radian"])                                                                                                                                                                                                                                                                                                                                                                                  fungsi = st.selectbox(
-                                                                                                                                                                                                                                                                                                                                                                                                        "Pilih Fungsi Scientific:",
-                                                                                                                                                                                                                                                                                                                                                                                                                [
-                                                                                                                                                                                                                                                                                                                                                                                                                            "Sinus — sin(x)",
-                                                                                                                                                                                                                                                                                                                                                                                                                                        "Cosinus — cos(x)",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    "Tangen — tan(x)",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                "Akar Kuadrat — √x",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "Logaritma Basis 10 — log10(x)",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        "Logaritma Natural — ln(x)",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    "Eksponensial — e^x",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                "Faktorial — x!",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            "Nilai Mutlak — |x|"
+    a = c1.number_input("Angka 1 (x):", value=0.0)
+    b = c2.number_input("Angka 2 (y):", value=0.0)
+    op = st.selectbox("Operasi:", ["Tambah (+)", "Kurang (-)", "Kali (×)", "Bagi (÷)", "Pangkat (^)"])
+    if st.button("Hitung", type="primary"):
+        if op == "Tambah (+)": st.success(f"Hasil: {a + b}")
+        elif op == "Kurang (-)": st.success(f"Hasil: {a - b}")
+        elif op == "Kali (×)": st.success(f"Hasil: {a * b}")
+        elif op == "Bagi (÷)": st.error("Tidak bisa dibagi 0") if b == 0 else st.success(f"Hasil: {a / b}")
+        elif op == "Pangkat (^)": st.success(f"Hasil: {math.pow(a, b)}")
+else:
+    c1, c2 = st.columns(2)
+    x = c1.number_input("Nilai (x):", value=0.0)
+    satuan = c2.selectbox("Sudut:", ["Derajat", "Radian"])
+    fn = st.selectbox("Fungsi:", ["sin(x)", "cos(x)", "tan(x)", "√x", "log10(x)", "ln(x)", "x!"])
+    if st.button("Hitung", type="primary"):
+        s = math.radians(x) if satuan == "Derajat" else x
+        if fn == "sin(x)": st.success(f"Hasil: {round(math.sin(s), 8)}")
+        elif fn == "cos(x)": st.success(f"Hasil: {round(math.cos(s), 8)}")
+        elif fn == "tan(x)": st.success(f"Hasil: {round(math.tan(s), 8)}")
+        elif fn == "√x": st.error("Harus >= 0") if x < 0 else st.success(f"Hasil: {math.sqrt(x)}")
+        elif fn == "log10(x)": st.error("Harus > 0") if x <= 0 else st.success(f"Hasil: {math.log10(x)}")
+        elif fn == "ln(x)": st.error("Harus > 0") if x <= 0 else st.success(f"Hasil: {math.log(x)}")
+        elif fn == "x!": st.error("Harus bulat >= 0") if x < 0 or not x.is_integer() else st.success(f"Hasil: {math.factorial(int(x))}")
+            "Nilai Mutlak — |x|"
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ]
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         )
 
