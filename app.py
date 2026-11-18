@@ -64,8 +64,7 @@ else:
         x = st.number_input("Masukkan Nilai (x):", value=0.0, format="%g")
     with col2:
         satuan_sudut = st.selectbox("Satuan Sudut (Trigonometri):", ["Derajat (°)", "Radian"])
-
-    fungsi = st.selectbox(
+        fungsi = st.selectbox(
         "Pilih Fungsi Scientific:",
         [
             "Sinus — sin(x)",
